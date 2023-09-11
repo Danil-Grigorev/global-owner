@@ -1,0 +1,7 @@
+resources:
+- configmapowner.yaml
+configMapGenerator:
+- name: globalowner
+  namespace: metacontroller
+  files:
+  - sync.py

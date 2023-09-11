@@ -1,0 +1,57 @@
+---
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: CompositeController
+metadata:
+  name: globalowner-controller
+spec:
+  parentResource:
+    apiVersion: globalowner.metacontroller.io/v1alpha1
+    resource: globalowners
+  childResources:
+  - apiVersion: v1
+    resource: configmaps
+  hooks:
+    sync:
+      webhook:
+        url: http://globalowner-controller.metacontroller/sync
+    customize:
+      webhook:
+        url: http://globalowner-controller.metacontroller/customize
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: globalowner-controller
+  namespace: metacontroller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: globalowner-controller
+  template:
+    metadata:
+      labels:
+        app: globalowner-controller
+    spec:
+      containers:
+      - name: controller
+        image: python:3.9
+        command: ["python", "/hooks/sync.py"]
+        volumeMounts:
+        - name: hooks
+          mountPath: /hooks
+      volumes:
+      - name: hooks
+        configMap:
+          name: globalowner
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: globalowner-controller
+  namespace: metacontroller
+spec:
+  selector:
+    app: globalowner-controller
+  ports:
+  - port: 80

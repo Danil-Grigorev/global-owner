@@ -1,0 +1,8 @@
+apiVersion: globalowner.metacontroller.io/v1alpha1
+kind: GlobalOwner
+metadata:
+  name: global-owner
+spec:
+  selector:
+    matchExpressions:
+    - {key: adopt, operator: Exists}
