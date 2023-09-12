@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: globalowner-controller
+  namespace: '{{ .Release.Namespace }}'
+spec:
+  selector:
+    app: globalowner-controller
+  ports:
+  - port: 80

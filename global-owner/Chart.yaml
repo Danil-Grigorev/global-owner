@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: 0.0.0
+description: A Helm chart for Global Owner resource
+name: global-owner
+type: application
+version: 0.0.0
+dependencies:
+- name: metacontroller-helm
+  version: v4.11.0
+  repository: oci://ghcr.io/metacontroller
