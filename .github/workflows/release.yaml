@@ -19,6 +19,8 @@ permissions:
 jobs:
   release:
     name: Create helm release
+    env:
+      HELM_EXPERIMENTAL_OCI: 1
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
