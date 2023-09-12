@@ -18,7 +18,7 @@ HELM_VER := v3.8.1
 HELM_BIN := helm
 HELM := $(TOOLS_BIN_DIR)/$(HELM_BIN)-$(HELM_VER)
 
-CHART_DIR := global-owner
+CHART_DIR := charts/global-owner
 RELEASE_DIR ?= out
 CHART_PACKAGE_DIR ?= $(RELEASE_DIR)/package
 
