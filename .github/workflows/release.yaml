@@ -1,0 +1,49 @@
+name: release
+
+on:
+  push:
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+env:
+  TAG: ${{ github.ref_name }}
+  CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+  GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+  RELEASE_DIR: .cr-release-packages
+  REPO: ${{ github.repository }}
+
+jobs:
+  release:
+    name: Create helm release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Package operator chart
+        run: RELEASE_TAG=${GITHUB_REF##*/} CHART_PACKAGE_DIR=${RELEASE_DIR} make release
+
+      - name: Install chart-releaser
+        uses: helm/chart-releaser-action@v1.5.0
+        with:
+          install_only: true
+
+      - name: Prepare environment for the chart releaser
+        run: |
+          echo "CR_OWNER=$(cut -d '/' -f 1 <<< $GITHUB_REPOSITORY)" >> $GITHUB_ENV
+          echo "CR_GIT_REPO=$(cut -d '/' -f 2 <<< $GITHUB_REPOSITORY)" >> $GITHUB_ENV
+          rm -rf .cr-index
+          mkdir -p .cr-index
+
+      - name: Run chart-releaser upload
+        run: cr upload --skip-existing -c "$(git rev-parse HEAD)"
+
+      - name: Run chart-releaser index
+        run: cr index --push
