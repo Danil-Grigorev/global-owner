@@ -51,7 +51,7 @@ all: generate-modules generate-crds
 
 .PHONY: release-chart
 release-chart: $(HELM) generate-crds $(RELEASE_DIR) $(CHART_PACKAGE_DIR) ## Builds the chart to publish with a release
-	$(HELM) package $(CHART_DIR) --app-version=$(RELEASE_TAG) --version=$(RELEASE_TAG) --destination=$(CHART_PACKAGE_DIR)
+	$(HELM) package --dependency-update $(CHART_DIR) --app-version=$(RELEASE_TAG) --version=$(RELEASE_TAG) --destination=$(CHART_PACKAGE_DIR)
 
 .PHONY: generate-crds
 generate-crds:
