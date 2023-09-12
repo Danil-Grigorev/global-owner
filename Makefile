@@ -11,6 +11,8 @@ TOOLS_DIR := hack/tools
 TOOLS_BIN_DIR := $(abspath $(TOOLS_DIR)/$(BIN_DIR))
 
 export PATH := $(abspath $(TOOLS_BIN_DIR)):$(PATH)
+# Active module mode, as we use go modules to manage dependencies
+export GO111MODULE=on
 
 HELM_VER := v3.8.1
 HELM_BIN := helm
@@ -49,13 +51,13 @@ all: generate-modules generate-crds
 
 .PHONY: release-chart
 release-chart: $(HELM) generate-crds $(RELEASE_DIR) $(CHART_PACKAGE_DIR) ## Builds the chart to publish with a release
-	$(HELM) package $(CHART_DIR) --app-version=$(RELEASE_TAG) --version=$(RELEASE_TAG) --destination=$(CHART_PACKAGE_DIR)
+	$(HELM) package --dependency-update $(CHART_DIR) --app-version=$(RELEASE_TAG) --version=$(RELEASE_TAG) --destination=$(CHART_PACKAGE_DIR)
 
 .PHONY: generate-crds
 generate-crds:
 	@echo "+ Generating crds"
-	@go install sigs.k8s.io/controller-tools/cmd/controller-gen@latest
-	@controller-gen +crd +paths="./api/..." +output:crd:stdout > v1/crdv1.yaml
+	GOBIN=$(TOOLS_BIN_DIR) go install sigs.k8s.io/controller-tools/cmd/controller-gen@latest
+	$(TOOLS_BIN_DIR)/controller-gen +crd +paths="./api/..." +output:crd:stdout > v1/crdv1.yaml
 
 .PHONY: generate-modules
 generate-modules: ## Run go mod tidy to ensure modules are up to date
