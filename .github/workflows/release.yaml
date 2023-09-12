@@ -51,3 +51,15 @@ jobs:
 
       - name: Run chart-releaser index
         run: cr index --push
+
+      - name: login to ghcr.io using helm
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io/Danil-Grigorev/global-owner --username ${{ github.repository_owner }} --password-stdin
+
+      - name: save helm chart to local registry
+        run: |
+          helm package ${{ github.workspace }}/deploy/helm/metacontroller/
+
+      - name: publish chart to ghcr.io
+        run: |
+          helm push metacontroller-helm-${{ github.ref_name }}.tgz oci://ghcr.io/Danil-Grigorev
