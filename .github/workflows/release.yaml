@@ -2,11 +2,11 @@ name: release
 
 on:
   push:
-    tags:
-    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    branches:
+    - '*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 env:
-  TAG: ${{ github.ref_name }}
+  TAG: 0.1.0
   CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
   GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
   RELEASE_DIR: .cr-release-packages
@@ -34,7 +34,7 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Package operator chart
-        run: RELEASE_TAG=${GITHUB_REF##*/} CHART_PACKAGE_DIR=${RELEASE_DIR} make release-chart
+        run: RELEASE_TAG=0.1.0 CHART_PACKAGE_DIR=${RELEASE_DIR} make release-chart
 
       - name: Install chart-releaser
         uses: helm/chart-releaser-action@v1.5.0
@@ -56,8 +56,8 @@ jobs:
 
       - name: login to ghcr.io using helm
         run: |
-          echo ${{ secrets.HELM_TOKEN }} | helm registry login ghcr.io --username ${{ github.repository_owner }} --password-stdin
+          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io/danil-grigorev/global-owner --username ${{ github.repository_owner }} --password-stdin
 
       - name: publish chart to ghcr.io
         run: |
-          helm push ${RELEASE_DIR}/global-owner-${{ github.ref_name }}.tgz oci://ghcr.io/danil-grigorev
+          helm push ${RELEASE_DIR}/global-owner-0.1.0.tgz oci://ghcr.io/danil-grigorev
