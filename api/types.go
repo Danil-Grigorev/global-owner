@@ -17,7 +17,11 @@
 // +groupName=globalowner.metacontroller.io
 package v1alpha1
 
-import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+import (
+	metacontrollerv1alpha1 "metacontroller/pkg/apis/metacontroller/v1alpha1"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
 
 // GlobalOwner
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -32,7 +36,8 @@ type GlobalOwner struct {
 }
 
 type GlobalOwnerSpec struct {
-	Selector *metav1.LabelSelector `json:"selector,omitempty"`
+	Selector       *metav1.LabelSelector                                         `json:"selector,omitempty"`
+	ChildResources []metacontrollerv1alpha1.CompositeControllerChildResourceRule `json:"childResources,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

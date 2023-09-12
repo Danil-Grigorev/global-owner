@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: globalowner-bootstrap
+  namespace: {{ .Release.Namespace }}
+data:
+  bootstrap-globalowner.jsonnet: |-
+{{ .Files.Get "bootstrap-globalowner.jsonnet" | indent 4}}

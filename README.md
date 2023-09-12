@@ -14,19 +14,25 @@ It uses `customize` hook to select a list of resources to adopt based on provide
 kubectl apply -k v1
 ```
 
+## Deploy the controller using helm
+
+```sh
+helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.1.17
+```
+
 ## Example
 
 This example presents the functionality by adopting configmaps matching label selector expression and setting ownership on those resources across the cluster.
 
-To create an example `GlobalOwner`, `CompositeController`, and a `ConfigMap`:
+To create an example `GlobalOwner` and a `ConfigMap`:
 
 ```sh
 kubectl apply -f example
 ```
 
-A `GlobalOwner` resource will be created and will adopt all resources matching the given `GVK`s provided in the `childResources` field under the `CompositeController` definition, assuming they match the `selector` value in the `GlobalOwner` resource spec.
+A `GlobalOwner` resource will be created and will adopt all resources matching the given `GVK`s provided in the `spec.childResources` field assuming they match the label selector `spec.selector` value.
 
-This example shows how a `GlobalOwner` resource could be used to adopt all `ConfigMaps` that don't have a `skip` annotation specified.
+This example shows how a `GlobalOwner` resource could be used to adopt all `ConfigMaps` that have an `adopt` label specified.
 
 Example `ConfigMap` resource located in [example/example-configmap.yaml](./example/example-configmap.yaml):
 ```yaml
@@ -62,6 +68,9 @@ metadata:
   resourceVersion: "3436"
   uid: 53f365d2-4c8e-469b-b09a-62994a968f8f
 spec:
+  childResources:
+  - apiVersion: v1
+    resource: configmaps
   selector:
     matchExpressions:
     - key: adopt

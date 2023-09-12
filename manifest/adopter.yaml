@@ -2,37 +2,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: globalowner-controller
+  name: globalowner-adopt
   namespace: metacontroller
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: globalowner-controller
+      app: globalowner-adopt
   template:
     metadata:
       labels:
-        app: globalowner-controller
+        app: globalowner-adopt
     spec:
       containers:
       - name: controller
         image: python:3.9
-        command: ["python", "/hooks/sync.py"]
+        command: ["python", "/hooks/adopt.py"]
         volumeMounts:
         - name: hooks
           mountPath: /hooks
       volumes:
       - name: hooks
         configMap:
-          name: globalowner
+          name: globalowner-adopt
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: globalowner-controller
+  name: globalowner-adopt
   namespace: metacontroller
 spec:
   selector:
-    app: globalowner-controller
+    app: globalowner-adopt
   ports:
   - port: 80

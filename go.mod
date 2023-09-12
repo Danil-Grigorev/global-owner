@@ -2,7 +2,10 @@ module github.com/Danil-Grigorev/global-owner
 
 go 1.20
 
-require k8s.io/apimachinery v0.28.1
+require (
+	k8s.io/apimachinery v0.28.1
+	metacontroller v0.0.0-00010101000000-000000000000
+)
 
 require (
 	github.com/go-logr/logr v1.2.4 // indirect
@@ -20,3 +23,5 @@ require (
 	sigs.k8s.io/json v0.0.0-20221116044647-bc3834ca7abd // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.2.3 // indirect
 )
+
+replace metacontroller => github.com/metacontroller/metacontroller v1.5.20

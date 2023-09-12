@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: '{{ .Release.Name }}'
-  namespace: '{{ .Release.Namespace }}'
+  name: {{ .Release.Name }}-adopt
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: '{{ .Release.Name }}'
+      app: {{ .Release.Name }}-adopt
   template:
     metadata:
       labels:
-        app: '{{ .Release.Name }}'
+        app: {{ .Release.Name }}-adopt
     spec:
       containers:
       - name: controller
         image: python:3.9
-        command: ["python", "/hooks/sync.py"]
+        command: ["python", "/hooks/adopt.py"]
         volumeMounts:
         - name: hooks
           mountPath: /hooks
       volumes:
       - name: hooks
         configMap:
-          name: globalowner
+          name: globalowner-adopt
