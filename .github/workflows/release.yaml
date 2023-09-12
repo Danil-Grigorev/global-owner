@@ -19,6 +19,8 @@ permissions:
 jobs:
   release:
     name: Create helm release
+    env:
+      HELM_EXPERIMENTAL_OCI: 1
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -54,7 +56,7 @@ jobs:
 
       - name: login to ghcr.io using helm
         run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.repository_owner }} --password-stdin
+          echo ${{ secrets.HELM_TOKEN }} | helm registry login ghcr.io --username ${{ github.repository_owner }} --password-stdin
 
       - name: publish chart to ghcr.io
         run: |
