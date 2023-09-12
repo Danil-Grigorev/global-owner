@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: globalowner-controller
+  name: '{{ .Release.Name }}'
   namespace: '{{ .Release.Namespace }}'
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: globalowner-controller
+      app: '{{ .Release.Name }}'
   template:
     metadata:
       labels:
-        app: globalowner-controller
+        app: '{{ .Release.Name }}'
     spec:
       containers:
       - name: controller
