@@ -14,19 +14,21 @@ It uses `customize` hook to select a list of resources to adopt based on provide
 kubectl apply -k v1
 ```
 
-### Create an example GlobalOwner, adopting deployments matching label selector expression
+## Example
+
+This example presents the functionality by adopting configmaps matching label selector expression and setting ownership on those resources across the cluster.
+
+To create an example `GlobalOwner`, `CompositeController`, and a `ConfigMap`:
 
 ```sh
-kubectl apply -f example-globalowner.yaml
+kubectl apply -f example
 ```
 
-A `GlobalOwner` resource will be created and will adopt all resources matching the given `GVK`s provided in the `childResources` field under the `CompositeController` definition, assuming they match the `selector` value.
-
-## Example
+A `GlobalOwner` resource will be created and will adopt all resources matching the given `GVK`s provided in the `childResources` field under the `CompositeController` definition, assuming they match the `selector` value in the `GlobalOwner` resource spec.
 
 This example shows how a `GlobalOwner` resource could be used to adopt all `ConfigMaps` that don't have a `skip` annotation specified.
 
-Example `ConfigMap` resource located in [example-configmap.yaml](./example-configmap.yaml):
+Example `ConfigMap` resource located in [example/example-configmap.yaml](./example/example-configmap.yaml):
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -40,11 +42,7 @@ data:
   other: "value"
 ```
 
-```sh
-kubectl apply -f example-configmap.yaml
-```
-
-After applying this resource in the cluster, the ownership reference should be set on the resource.
+After these resources are applyed in the cluster, the ownership reference should be set on the resource.
 
 ```bash
 $ kubectl get globalowner -o yaml
