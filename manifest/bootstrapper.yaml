@@ -1,0 +1,58 @@
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: DecoratorController
+metadata:
+  name: globalowner-bootstrap
+  annotations:
+    adopter: globalowner-adopt
+spec:
+  resources:
+  - apiVersion: globalowner.metacontroller.io/v1alpha1
+    resource: globalowners
+  attachments:
+  - apiVersion: metacontroller.k8s.io/v1alpha1
+    resource: compositecontrollers
+  hooks:
+    sync:
+      webhook:
+        url: http://globalowner-bootstrap.metacontroller/bootstrap-globalowner
+        timeout: 10s
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: globalowner-bootstrap
+  namespace: metacontroller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: globalowner-bootstrap
+  template:
+    metadata:
+      labels:
+        app: globalowner-bootstrap
+    spec:
+      containers:
+      - name: hooks
+        image: metacontroller/jsonnetd:0.1
+        imagePullPolicy: Always
+        workingDir: /hooks
+        volumeMounts:
+        - name: hooks
+          mountPath: /hooks
+      volumes:
+      - name: hooks
+        configMap:
+          name: globalowner-bootstrap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: globalowner-bootstrap
+  namespace: metacontroller
+spec:
+  selector:
+    app: globalowner-bootstrap
+  ports:
+  - port: 80
+    targetPort: 8080

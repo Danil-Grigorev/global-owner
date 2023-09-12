@@ -6,3 +6,6 @@ spec:
   selector:
     matchExpressions:
     - {key: adopt, operator: Exists}
+  childResources:
+  - apiVersion: v1
+    resource: configmaps

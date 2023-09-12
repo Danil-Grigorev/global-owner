@@ -33,6 +33,39 @@ spec:
             type: object
           spec:
             properties:
+              childResources:
+                items:
+                  properties:
+                    apiVersion:
+                      type: string
+                    resource:
+                      type: string
+                    updateStrategy:
+                      properties:
+                        method:
+                          type: string
+                        statusChecks:
+                          properties:
+                            conditions:
+                              items:
+                                properties:
+                                  reason:
+                                    type: string
+                                  status:
+                                    type: string
+                                  type:
+                                    type: string
+                                required:
+                                - type
+                                type: object
+                              type: array
+                          type: object
+                      type: object
+                  required:
+                  - apiVersion
+                  - resource
+                  type: object
+                type: array
               selector:
                 description: A label selector is a label query over a set of resources.
                   The result of matchLabels and matchExpressions are ANDed. An empty

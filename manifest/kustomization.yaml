@@ -1,7 +1,12 @@
 resources:
-- configmapowner.yaml
+- bootstrapper.yaml
+- adopter.yaml
 configMapGenerator:
-- name: globalowner
+- name: globalowner-adopt
   namespace: metacontroller
   files:
-  - sync.py
+  - adopt.py
+- name: globalowner-bootstrap
+  namespace: metacontroller
+  files:
+  - bootstrap-globalowner.jsonnet

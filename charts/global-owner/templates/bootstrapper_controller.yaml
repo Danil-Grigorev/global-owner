@@ -1,0 +1,18 @@
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: DecoratorController
+metadata:
+  name: {{ .Release.Name }}-bootstrap
+  annotations:
+    adopter: {{ .Release.Name }}-adopt
+spec:
+  resources:
+  - apiVersion: globalowner.metacontroller.io/v1alpha1
+    resource: globalowners
+  attachments:
+  - apiVersion: metacontroller.k8s.io/v1alpha1
+    resource: compositecontrollers
+  hooks:
+    sync:
+      webhook:
+        url: http://{{ .Release.Name }}-bootstrap.metacontroller/bootstrap-globalowner
+        timeout: 10s
