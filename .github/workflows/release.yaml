@@ -11,6 +11,7 @@ env:
   GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
   RELEASE_DIR: .cr-release-packages
   REPO: ${{ github.repository }}
+  CR_SKIP_EXISTING: true
 
 jobs:
   release:
