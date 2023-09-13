@@ -2,17 +2,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name | default .Release.Name }}-bootstrap
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  name: {{ include "globalowner.name" . }}-bootstrap
+  namespace: {{ include "globalowner.namespace" . }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.name | default .Release.Name }}-bootstrap
+      app: {{ include "globalowner.name" . }}-bootstrap
   template:
     metadata:
       labels:
-        app: {{ .Values.name | default .Release.Name }}-bootstrap
+        app: {{ include "globalowner.name" . }}-bootstrap
     spec:
       containers:
       - name: hooks

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: globalowner-bootstrap
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  namespace: {{ include "globalowner.namespace" . }}
 data:
   bootstrap-globalowner.jsonnet: |-
 {{ .Files.Get "bootstrap-globalowner.jsonnet" | indent 4}}

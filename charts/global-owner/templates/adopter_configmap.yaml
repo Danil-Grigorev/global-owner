@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: globalowner-adopt
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  namespace: {{ include "globalowner.namespace" . }}
 data:
   adopt.py: |-
 {{ .Files.Get "adopt.py" | indent 4}}

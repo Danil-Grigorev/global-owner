@@ -1,8 +1,12 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "global-owner.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- define "globalowner.name" -}}
+{{- default .Release.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{- define "globalowner.namespace" -}}
+{{- default .Release.Namespace .Values.namespaceOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.name | default .Release.Name }}-adopt
-  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  name: {{ include "globalowner.name" . }}-adopt
+  namespace: {{ include "globalowner.namespace" . }}
 spec:
   selector:
-    app: {{ .Values.name | default .Release.Name }}-adopt
+    app: {{ include "globalowner.name" . }}-adopt
   ports:
   - port: 80
