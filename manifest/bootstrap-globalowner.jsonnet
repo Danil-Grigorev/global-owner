@@ -17,8 +17,8 @@ function(request) {
         },
         childResources: globalowner.spec.childResources,
         hooks: {
-          sync: { webhook: { url: 'http://' + bootstrapper.metadata.annotations['adopter'] + '.metacontroller/sync' } },
-          customize: { webhook: { url: 'http://' + bootstrapper.metadata.annotations['adopter'] + '.metacontroller/customize' } },
+          sync: { webhook: { url: 'http://' + bootstrapper.metadata.annotations['adopter'] + '/sync' } },
+          customize: { webhook: { url: 'http://' + bootstrapper.metadata.annotations['adopter'] + '/customize' } },
         },
       },
     },
