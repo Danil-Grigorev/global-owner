@@ -4,5 +4,5 @@ metadata:
   name: globalowner-bootstrap
   namespace: {{ include "globalowner.namespace" . }}
 data:
-  bootstrap-globalowner.jsonnet: |-
-{{ .Files.Get "bootstrap-globalowner.jsonnet" | indent 4}}
+  bootstrap.jsonnet: |-
+{{ .Files.Get "bootstrap.jsonnet" | indent 4}}

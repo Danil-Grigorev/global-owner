@@ -15,9 +15,10 @@ spec:
         app: globalowner-adopt
     spec:
       containers:
-      - name: controller
-        image: python:3.9
-        command: ["python", "/hooks/adopt.py"]
+      - name: hooks
+        image: metacontroller/jsonnetd:0.1
+        imagePullPolicy: Always
+        workingDir: /hooks
         volumeMounts:
         - name: hooks
           mountPath: /hooks
@@ -36,3 +37,4 @@ spec:
     app: globalowner-adopt
   ports:
   - port: 80
+    targetPort: 8080

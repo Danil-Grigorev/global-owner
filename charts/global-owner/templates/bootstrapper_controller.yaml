@@ -14,5 +14,5 @@ spec:
   hooks:
     sync:
       webhook:
-        url: http://{{ include "globalowner.name" . }}-bootstrap/bootstrap-globalowner
+        url: http://{{ include "globalowner.name" . }}-bootstrap/bootstrap
         timeout: 10s

@@ -8,3 +8,4 @@ spec:
     app: {{ include "globalowner.name" . }}-adopt
   ports:
   - port: 80
+    targetPort: 8080

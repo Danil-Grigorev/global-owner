@@ -5,8 +5,9 @@ configMapGenerator:
 - name: globalowner-adopt
   namespace: metacontroller
   files:
-  - adopt.py
+  - adopt.jsonnet
+  - customize.jsonnet
 - name: globalowner-bootstrap
   namespace: metacontroller
   files:
-  - bootstrap-globalowner.jsonnet
+  - bootstrap.jsonnet

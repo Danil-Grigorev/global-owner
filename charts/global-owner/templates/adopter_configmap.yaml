@@ -4,5 +4,7 @@ metadata:
   name: globalowner-adopt
   namespace: {{ include "globalowner.namespace" . }}
 data:
-  adopt.py: |-
-{{ .Files.Get "adopt.py" | indent 4}}
+  adopt.jsonnet: |-
+{{ .Files.Get "adopt.jsonnet" | indent 4}}
+  customize.jsonnet: |-
+{{ .Files.Get "customize.jsonnet" | indent 4}}

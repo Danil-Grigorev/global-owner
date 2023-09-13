@@ -14,7 +14,7 @@ spec:
   hooks:
     sync:
       webhook:
-        url: http://globalowner-bootstrap/bootstrap-globalowner
+        url: http://globalowner-bootstrap/bootstrap
         timeout: 10s
 ---
 apiVersion: apps/v1
