@@ -11,13 +11,18 @@ It uses `customize` hook to select a list of resources to adopt based on provide
 ### Deploy the controller
 
 ```sh
+kubectl apply -k https://github.com/danil-grigorev/global-owner/v1
+```
+
+or locally with
+```sh
 kubectl apply -k v1
 ```
 
 ## Deploy the controller using helm
 
 ```sh
-helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.2.0
+helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.2.1
 ```
 
 ## Example

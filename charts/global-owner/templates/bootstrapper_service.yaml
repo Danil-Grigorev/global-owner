@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-bootstrap
-  namespace: {{ .Release.Namespace }}
+  name: {{ .Values.name | default .Release.Name }}-bootstrap
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
 spec:
   selector:
-    app: {{ .Release.Name }}-bootstrap
+    app: {{ .Values.name | default .Release.Name }}-bootstrap
   ports:
   - port: 80
     targetPort: 8080

@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-adopt
-  namespace: {{ .Release.Namespace }}
+  name: {{ .Values.name | default .Release.Name }}-adopt
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-adopt
+      app: {{ .Values.name | default .Release.Name }}-adopt
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-adopt
+        app: {{ .Values.name | default .Release.Name }}-adopt
     spec:
       containers:
       - name: controller
