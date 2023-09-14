@@ -1,0 +1,11 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: metacontroller
+  labels:
+    app.kubernetes.io/name: metacontroller
+aggregationRule:
+  clusterRoleSelectors:
+    - matchLabels:
+        rbac.metacontroller.k8s.io/aggregate-to-metacontroller: "true"
+rules: []

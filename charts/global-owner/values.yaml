@@ -1,2 +1,11 @@
 namespaceOverride: ""
 nameOverride: ""
+aggregationLabel: &aggregationKey rbac.metacontroller.k8s.io/aggregate-to-metacontroller
+
+metacontroller-helm:
+  clusterRole:
+    aggregationRule:
+      clusterRoleSelectors:
+        - matchLabels:
+            *aggregationKey : "true"
+    rules: []

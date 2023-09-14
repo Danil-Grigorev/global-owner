@@ -22,12 +22,12 @@ kubectl apply -k v1
 ## Deploy the controller using helm
 
 ```sh
-helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.2.1
+helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=0.3.0
 ```
 
 ## Example
 
-This example presents the functionality by adopting configmaps matching label selector expression and setting ownership on those resources across the cluster.
+This example presents the functionality by adopting `ConfigMaps` matching label selector expression and setting ownership on those resources across the cluster, but the same process could be applied to any resource kind existing in the cluster. For each resource type the permissions to own the object will be granularly adjusted.
 
 To create an example `GlobalOwner` and a `ConfigMap`:
 
@@ -53,7 +53,7 @@ data:
   other: "value"
 ```
 
-After these resources are applyed in the cluster, the ownership reference should be set on the resource.
+After these resources are applied in the cluster, the ownership reference should be set on the resource.
 
 ```bash
 $ kubectl get globalowner -o yaml

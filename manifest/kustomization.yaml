@@ -1,6 +1,10 @@
 resources:
 - bootstrapper.yaml
 - adopter.yaml
+- clusterrole.yaml
+- adopter_clusterrole.yaml
+- bootstrapper_clusterrole.yaml
+- metacontroller_clusterrole.yaml
 configMapGenerator:
 - name: globalowner-adopt
   namespace: metacontroller

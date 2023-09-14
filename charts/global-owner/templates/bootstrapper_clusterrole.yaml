@@ -1,0 +1,28 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "globalowner.name" . }}-bootstrap
+  labels:
+    {{ .Values.aggregationLabel }}: "true"
+rules:
+  ## Bootstrapper
+  - apiGroups:
+      - metacontroller.k8s.io
+    resources:
+      - compositecontrollers
+    verbs:
+      - create
+      - update
+      - patch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - clusterroles
+    verbs:
+      - create
+      - update
+      - get
+      - list
+      - watch
+      - patch
+      - escalate

@@ -1,0 +1,20 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: globalowner-adopt
+  labels:
+    rbac.metacontroller.k8s.io/aggregate-to-metacontroller: "true"
+rules:
+  ## Adopter
+  - apiGroups:
+      - globalowner.metacontroller.io
+    resources:
+      - globalowners
+      - globalowners/status
+    verbs:
+      - create
+      - update
+      - get
+      - list
+      - watch
+      - patch

@@ -1,7 +1,9 @@
 local owned(children) = [
-  child.metadata {
+  {
     kind: child.kind,
     apiVersion: child.apiVersion,
+    name: child.metadata.name,
+    namespace: child.metadata.namespace,
   }
   for child in children
 ];
