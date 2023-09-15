@@ -22,7 +22,7 @@ kubectl apply -k v1
 ## Deploy the controller using helm
 
 ```sh
-helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=0.3.0
+helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.3.0
 ```
 
 ## Example
@@ -119,3 +119,7 @@ metadata:
   resourceVersion: "1602"
   uid: e3aa2bc8-7615-44de-a788-e6a5296b47bb
 ```
+
+## Deletion
+
+As the resource is adopted using owner reference to the parent object, when the parent object is removed using foreground or backgroud policy, the adopted resource will be removed as well. To opt-out from this behavior you can delete the globalowner resource with orphan policy. Adopted resources will stay untouched, however the CompositeController and the ClusterRole created by the globalowner resource will stay in cluster, so the permission scope will not be reduced. Those will have to cleaned up manually.
