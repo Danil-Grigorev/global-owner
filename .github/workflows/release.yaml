@@ -17,6 +17,33 @@ permissions:
   contents: write # Allow to create a release.
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Docker login
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Convert actor name to lowercase and store in the env
+      run: |
+        echo "OWNER=$(echo $GITHUB_ACTOR | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+    - name: Build jsonnetd docker image
+      run: docker build -t ghcr.io/${OWNER}/jsonnetd:${{ env.TAG }} jsonnetd
+
+    - name: Push jsonnetd docker image
+      run: docker push ghcr.io/${OWNER}/jsonnetd:${{ env.TAG }}
   release:
     name: Create helm release
     env:
@@ -45,6 +72,7 @@ jobs:
         run: |
           echo "CR_OWNER=$(cut -d '/' -f 1 <<< $GITHUB_REPOSITORY)" >> $GITHUB_ENV
           echo "CR_GIT_REPO=$(cut -d '/' -f 2 <<< $GITHUB_REPOSITORY)" >> $GITHUB_ENV
+          echo "OWNER=$(echo $GITHUB_ACTOR | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
           rm -rf .cr-index
           mkdir -p .cr-index
 
@@ -60,4 +88,4 @@ jobs:
 
       - name: publish chart to ghcr.io
         run: |
-          helm push ${RELEASE_DIR}/global-owner-${{ github.ref_name }}.tgz oci://ghcr.io/danil-grigorev
+          helm push ${RELEASE_DIR}/global-owner-${{ github.ref_name }}.tgz oci://ghcr.io/${OWNER}
