@@ -1,5 +1,6 @@
 namespaceOverride: ""
 nameOverride: ""
+image: ghcr.io/danil-grigorev/jsonnetd:v0.3.1
 aggregationLabel: &aggregationKey rbac.metacontroller.k8s.io/aggregate-to-metacontroller
 
 metacontroller-helm:
