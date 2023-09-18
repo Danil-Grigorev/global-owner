@@ -4,7 +4,10 @@ metadata:
   name: {{ include "globalowner.name" . }}-bootstrap
   annotations:
     adopter: {{ include "globalowner.name" . }}-adopt
+    binder: {{ include "globalowner.name" . }}-bind
     aggregationLabel: {{ .Values.aggregationLabel }}
+    serviceAccount: {{ .Values.serviceAccount }}
+    serviceAccountNamespace: {{ .Release.Namespace }}
 spec:
   resources:
   - apiVersion: globalowner.metacontroller.io/v1alpha1
@@ -12,6 +15,8 @@ spec:
   attachments:
   - apiVersion: metacontroller.k8s.io/v1alpha1
     resource: compositecontrollers
+  - apiVersion: metacontroller.k8s.io/v1alpha1
+    resource: decoratorcontrollers
   - apiVersion: rbac.authorization.k8s.io/v1
     resource: clusterroles
   hooks:

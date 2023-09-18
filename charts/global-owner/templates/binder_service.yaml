@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "globalowner.name" . }}-bind
+  namespace: {{ include "globalowner.namespace" . }}
+spec:
+  selector:
+    app: {{ include "globalowner.name" . }}-bind
+  ports:
+  - port: 80
+    targetPort: 8080

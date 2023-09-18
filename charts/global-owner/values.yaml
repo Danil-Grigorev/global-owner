@@ -1,8 +1,12 @@
 namespaceOverride: ""
 nameOverride: ""
 aggregationLabel: &aggregationKey rbac.metacontroller.k8s.io/aggregate-to-metacontroller
+serviceAccount: &serviceAccountName globalowner-metacontroller
 
 metacontroller-helm:
+  serviceAccount:
+    create: true
+    name: *serviceAccountName
   clusterRole:
     aggregationRule:
       clusterRoleSelectors:

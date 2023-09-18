@@ -1,17 +1,18 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "globalowner.name" . }}-adopt
+  name: {{ include "globalowner.name" . }}-bind
   namespace: {{ include "globalowner.namespace" . }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "globalowner.name" . }}-adopt
+      app: {{ include "globalowner.name" . }}-bind
   template:
     metadata:
       labels:
-        app: {{ include "globalowner.name" . }}-adopt
+        app: {{ include "globalowner.name" . }}-bind
     spec:
       containers:
       - name: hooks
@@ -24,4 +25,4 @@ spec:
       volumes:
       - name: hooks
         configMap:
-          name: globalowner-adopt
+          name: globalowner-bind

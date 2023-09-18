@@ -6,3 +6,5 @@ metadata:
 data:
   bootstrap.jsonnet: |-
 {{ .Files.Get "bootstrap.jsonnet" | indent 4}}
+  rules.jsonnet: |-
+{{ .Files.Get "rules.jsonnet" | indent 4}}

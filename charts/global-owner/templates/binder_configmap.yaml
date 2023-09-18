@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: globalowner-bind
+  namespace: {{ include "globalowner.namespace" . }}
+data:
+  bind.jsonnet: |-
+{{ .Files.Get "bind.jsonnet" | indent 4}}
+  rules.jsonnet: |-
+{{ .Files.Get "rules.jsonnet" | indent 4}}
