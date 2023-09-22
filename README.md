@@ -22,7 +22,7 @@ kubectl apply -k v1
 ## Deploy the controller using helm
 
 ```sh
-helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.3.0
+helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.4.0
 ```
 
 ## Example
