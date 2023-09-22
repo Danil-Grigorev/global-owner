@@ -22,7 +22,7 @@ kubectl apply -k v1
 ## Deploy the controller using helm
 
 ```sh
-helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=0.3.0
+helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.3.0
 ```
 
 ## Example
@@ -39,7 +39,7 @@ A `GlobalOwner` resource will be created and will adopt all resources matching t
 
 This example shows how a `GlobalOwner` resource could be used to adopt all `ConfigMaps` that have an `adopt` label specified.
 
-Example `ConfigMap` resource located in [example/example-configmap.yaml](./example/example-configmap.yaml):
+Example `ConfigMap` and a `Secret` resource located in [example/example-resource-set.yaml](./example/example-resource-set.yaml):
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -51,6 +51,15 @@ metadata:
 data:
   some: "value"
   other: "value"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: test
+  namespace: default
+  labels:
+    adopt: "true"
+data: {}
 ```
 
 After these resources are applied in the cluster, the ownership reference should be set on the resource.
@@ -75,6 +84,9 @@ metadata:
 spec:
   childResources:
   - apiVersion: v1
+    resource: secrets
+    weight: 1
+  - apiVersion: v1
     resource: configmaps
   selector:
     matchExpressions:
@@ -85,6 +97,10 @@ status:
   ownedResources:
   - apiVersion: v1
     kind: ConfigMap
+    name: test
+    namespace: default
+  - apiVersion: v1
+    kind: Secret
     name: test
     namespace: default
 ```
@@ -119,3 +135,11 @@ metadata:
   resourceVersion: "1602"
   uid: e3aa2bc8-7615-44de-a788-e6a5296b47bb
 ```
+
+## Ordered deletion
+
+When some resource has an assigned weight, the child resource removal is processed from the lowest to the highest weight. By default, the child resource weight is 0.
+
+## Deletion
+
+As the resource is adopted using owner reference to the parent object, when the parent object is removed using foreground or background policy, the adopted resource will be removed as well. To opt out of this behavior, the metacontroller instance should be scaled down, the finalizer `metacontroller.io/compositecontroller-<global-owner-name>` should be removed from the resource, and then the `GlobalOwner` resource can be deleted with the `orphan` deletion policy. Adopted resources will stay untouched, however, the `CompositeController` and the `ClusterRole` created by the `GlobalOwner` resource will stay in the cluster, so the permission scope will not be reduced. Those will have to be cleaned up manually.

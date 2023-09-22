@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: hooks
-        image: metacontroller/jsonnetd:0.1
+        image: {{ .Values.image }}
         imagePullPolicy: Always
         workingDir: /hooks
         volumeMounts:

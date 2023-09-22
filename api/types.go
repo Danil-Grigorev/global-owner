@@ -36,8 +36,15 @@ type GlobalOwner struct {
 }
 
 type GlobalOwnerSpec struct {
-	Selector       *metav1.LabelSelector                                         `json:"selector,omitempty"`
-	ChildResources []metacontrollerv1alpha1.CompositeControllerChildResourceRule `json:"childResources,omitempty"`
+	Selector       *metav1.LabelSelector `json:"selector,omitempty"`
+	ChildResources []ChildResource       `json:"childResources"`
+}
+
+type ChildResource struct {
+	metacontrollerv1alpha1.ResourceRule `json:",inline"`
+
+	Weight         int                                                            `json:"weight,omitempty"`
+	UpdateStrategy *metacontrollerv1alpha1.CompositeControllerChildUpdateStrategy `json:"updateStrategy,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

@@ -8,3 +8,5 @@ data:
 {{ .Files.Get "adopt.jsonnet" | indent 4}}
   customize.jsonnet: |-
 {{ .Files.Get "customize.jsonnet" | indent 4}}
+  finalize.jsonnet: |-
+{{ .Files.Get "finalize.jsonnet" | indent 4}}

@@ -61,6 +61,8 @@ spec:
                               type: array
                           type: object
                       type: object
+                    weight:
+                      type: integer
                   required:
                   - apiVersion
                   - resource
@@ -114,6 +116,8 @@ spec:
                     type: object
                 type: object
                 x-kubernetes-map-type: atomic
+            required:
+            - childResources
             type: object
           status:
             properties:

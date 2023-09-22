@@ -11,6 +11,7 @@ configMapGenerator:
   files:
   - adopt.jsonnet
   - customize.jsonnet
+  - finalize.jsonnet
 - name: globalowner-bootstrap
   namespace: metacontroller
   files:

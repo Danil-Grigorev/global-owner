@@ -1,15 +1,30 @@
+local hasWeight(child) = std.objectHas(child, 'weight');
+
 local addAdoptRule(child) = {
   local apiGroup = std.split(child.apiVersion, '/')[0],
   local containsSeparator = std.length(apiGroup) == 1,
 
-  apiGroups: [if containsSeparator then apiGroup else ''],
-  resources: [child.resource],
-  verbs: [
+  local verbs = [
     'get',
     'list',
     'watch',
     'update',
   ],
+
+  apiGroups: [if containsSeparator then apiGroup else ''],
+  resources: [child.resource],
+  verbs: if hasWeight(child) then verbs + ['delete'] else verbs,
+};
+
+local originalChild(child) = {
+  apiVersion: child.apiVersion,
+  resource: child.resource,
+};
+
+local hooks(bootstrapper) = {
+  sync: { webhook: { url: 'http://' + bootstrapper.metadata.annotations.adopter + '/adopt' } },
+  customize: { webhook: { url: 'http://' + bootstrapper.metadata.annotations.adopter + '/customize' } },
+  finalize: { webhook: { url: 'http://' + bootstrapper.metadata.annotations.adopter + '/finalize' } },
 };
 
 function(request) {
@@ -29,11 +44,8 @@ function(request) {
           apiVersion: 'globalowner.metacontroller.io/v1alpha1',
           resource: 'globalowners',
         },
-        childResources: globalowner.spec.childResources,
-        hooks: {
-          sync: { webhook: { url: 'http://' + bootstrapper.metadata.annotations.adopter + '/adopt' } },
-          customize: { webhook: { url: 'http://' + bootstrapper.metadata.annotations.adopter + '/customize' } },
-        },
+        childResources: std.map(originalChild, globalowner.spec.childResources),
+        hooks: hooks(bootstrapper),
       },
     },
     {
