@@ -43,18 +43,43 @@ type GlobalOwnerSpec struct {
 type ChildResource struct {
 	metacontrollerv1alpha1.ResourceRule `json:",inline"`
 
-	Weight         int                                                            `json:"weight,omitempty"`
 	UpdateStrategy *metacontrollerv1alpha1.CompositeControllerChildUpdateStrategy `json:"updateStrategy,omitempty"`
+
+	Names     []string              `json:"names,omitempty"`
+	Namespace string                `json:"namespace,omitempty"`
+	Selector  *metav1.LabelSelector `json:"selector,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type OwnedResource struct {
 	metav1.TypeMeta `json:",inline"`
-	Name            string `json:"name,omitempty"`
-	Namespace       string `json:"namespace,omitempty"`
+
+	Name      string `json:"name,omitempty"`
+	Namespace string `json:"namespace,omitempty"`
 }
 
 type GlobalOwnerStatus struct {
+	ObservedGeneration int `json:"observedGeneration,omitempty"`
+}
+
+// GroupOwner
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +kubebuilder:subresource:status
+// +kubebuilder:resource:path=groupowners,scope=Cluster
+type GroupOwner struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata"`
+
+	Spec   GroupOwnerSpec   `json:"spec"`
+	Status GroupOwnerStatus `json:"status,omitempty"`
+}
+
+type GroupOwnerSpec struct {
+	Selector      *metav1.LabelSelector `json:"selector,omitempty"`
+	ChildResource ChildResource         `json:"childResource"`
+}
+
+type GroupOwnerStatus struct {
 	OwnedResources     []OwnedResource `json:"ownedResources,omitempty"`
 	ObservedGeneration int             `json:"observedGeneration,omitempty"`
 }

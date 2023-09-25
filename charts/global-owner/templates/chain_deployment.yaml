@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "globalowner.name" . }}-bootstrap
+  name: {{ include "globalowner.name" . }}-chain
   namespace: {{ include "globalowner.namespace" . }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "globalowner.name" . }}-bootstrap
+      app: {{ include "globalowner.name" . }}-chain
   template:
     metadata:
       labels:
-        app: {{ include "globalowner.name" . }}-bootstrap
+        app: {{ include "globalowner.name" . }}-chain
     spec:
       containers:
       - name: hooks
@@ -24,4 +24,4 @@ spec:
       volumes:
       - name: hooks
         configMap:
-          name: globalowner-bootstrap
+          name: globalowner-chain
