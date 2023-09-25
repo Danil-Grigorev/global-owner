@@ -85,24 +85,13 @@ spec:
   childResources:
   - apiVersion: v1
     resource: secrets
-    weight: 1
+    namespace: default
+    names:
+    - test
   - apiVersion: v1
     resource: configmaps
-  selector:
-    matchExpressions:
-    - key: adopt
-      operator: Exists
 status:
   observedGeneration: 1
-  ownedResources:
-  - apiVersion: v1
-    kind: ConfigMap
-    name: test
-    namespace: default
-  - apiVersion: v1
-    kind: Secret
-    name: test
-    namespace: default
 ```
 
 ```bash
@@ -138,7 +127,9 @@ metadata:
 
 ## Ordered deletion
 
-When some resource has an assigned weight, the child resource removal is processed from the lowest to the highest weight. By default, the child resource weight is 0.
+Resources deletion is processed in the order specified on the `GlobalOwner` resource.
+
+![Deletion process](./deletion.png)
 
 ## Deletion
 

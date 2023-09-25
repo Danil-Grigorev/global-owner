@@ -1,0 +1,19 @@
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: CompositeController
+metadata:
+  name: {{ include "globalowner.name" . }}-chain
+spec:
+  generateSelector: true
+  parentResource:
+    apiVersion: globalowner.metacontroller.io/v1alpha1
+    resource: globalowners
+  childResources:
+  - apiVersion: globalowner.metacontroller.io/v1alpha1
+    resource: groupowners
+    updateStrategy:
+      method: InPlace
+  hooks:
+    sync:
+      webhook:
+        url: http://{{ include "globalowner.name" . }}-chain/chain-ownership
+        timeout: 10s

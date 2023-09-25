@@ -1,8 +1,7 @@
-local hasWeight(child) = std.objectHas(child, 'weight');
-
 local addAdoptRule(child) = {
-  local apiGroup = std.split(child.apiVersion, '/')[0],
-  local containsSeparator = std.length(apiGroup) == 1,
+  local group = std.split(child.apiVersion, '/'),
+  local apiGroup = group[0],
+  local containsSeparator = std.length(group) > 1,
 
   local verbs = [
     'get',
@@ -13,7 +12,7 @@ local addAdoptRule(child) = {
 
   apiGroups: [if containsSeparator then apiGroup else ''],
   resources: [child.resource],
-  verbs: if hasWeight(child) then verbs + ['delete'] else verbs,
+  verbs: verbs,
 };
 
 local originalChild(child) = {
@@ -24,40 +23,46 @@ local originalChild(child) = {
 local hooks(bootstrapper) = {
   sync: { webhook: { url: 'http://' + bootstrapper.metadata.annotations.adopter + '/adopt' } },
   customize: { webhook: { url: 'http://' + bootstrapper.metadata.annotations.adopter + '/customize' } },
-  finalize: { webhook: { url: 'http://' + bootstrapper.metadata.annotations.adopter + '/finalize' } },
 };
+
+local compositeController(child, index, globalowner, bootstrapper) = {
+  apiVersion: bootstrapper.apiVersion,
+  kind: 'CompositeController',
+  metadata: {
+    name: 'group-owner' + '-' + child.resource + '-' + index,
+  },
+  spec: {
+    parentResource: {
+      apiVersion: globalowner.apiVersion,
+      resource: 'groupowners',
+    },
+    childResources: [originalChild(child)],
+    hooks: hooks(bootstrapper),
+  },
+};
+
+local infrastructure(globalowner, bootstrapper) = [
+  {
+    kind: 'ClusterRole',
+    apiVersion: 'rbac.authorization.k8s.io/v1',
+    metadata: {
+      name: globalowner.metadata.name,
+      labels: {
+        [bootstrapper.metadata.annotations.aggregationLabel]: 'true',
+      },
+    },
+    rules: std.map(addAdoptRule, globalowner.spec.childResources),
+  },
+] + [
+  compositeController(globalowner.spec.childResources[n], n, globalowner, bootstrapper)
+  for n in std.range(0, std.length(globalowner.spec.childResources) - 1)
+];
 
 function(request) {
   local globalowner = request.object,
   local bootstrapper = request.controller,
 
-  // Create a composite controller for each GlobalOwner, with a list of api types to adopt
-  attachments: [
-    {
-      apiVersion: 'metacontroller.k8s.io/v1alpha1',
-      kind: 'CompositeController',
-      metadata: {
-        name: globalowner.metadata.name,
-      },
-      spec: {
-        parentResource: {
-          apiVersion: 'globalowner.metacontroller.io/v1alpha1',
-          resource: 'globalowners',
-        },
-        childResources: std.map(originalChild, globalowner.spec.childResources),
-        hooks: hooks(bootstrapper),
-      },
-    },
-    {
-      kind: 'ClusterRole',
-      apiVersion: 'rbac.authorization.k8s.io/v1',
-      metadata: {
-        name: globalowner.metadata.name,
-        labels: {
-          [bootstrapper.metadata.annotations.aggregationLabel]: 'true',
-        },
-      },
-      rules: std.map(addAdoptRule, globalowner.spec.childResources),
-    },
-  ],
+  // Create a composite controller for every GroupOwner, and a list of GroupOwners to adopt
+  // specific type
+  attachments: infrastructure(globalowner, bootstrapper),
 }

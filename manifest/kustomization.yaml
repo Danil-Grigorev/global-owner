@@ -5,14 +5,19 @@ resources:
 - adopter_clusterrole.yaml
 - bootstrapper_clusterrole.yaml
 - metacontroller_clusterrole.yaml
+- chain.yaml
+- chain_clusterrole.yaml
 configMapGenerator:
 - name: globalowner-adopt
   namespace: metacontroller
   files:
   - adopt.jsonnet
   - customize.jsonnet
-  - finalize.jsonnet
 - name: globalowner-bootstrap
   namespace: metacontroller
   files:
   - bootstrap.jsonnet
+- name: globalowner-chain
+  namespace: metacontroller
+  files:
+  - chain-ownership.jsonnet
