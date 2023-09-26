@@ -2,6 +2,20 @@ apiVersion: v1
 entries:
   global-owner:
   - apiVersion: v2
+    appVersion: v0.5.0
+    created: "2023-09-26T21:21:22.846887582Z"
+    dependencies:
+    - name: metacontroller-helm
+      repository: oci://ghcr.io/metacontroller
+      version: v4.11.0
+    description: A Helm chart for Global Owner resource
+    digest: df36dc20193095c7e5e9f7677d6b0841aba7b685e7770d30de2827468b486cfc
+    name: global-owner
+    type: application
+    urls:
+    - https://github.com/Danil-Grigorev/global-owner/releases/download/global-owner-v0.5.0/global-owner-v0.5.0.tgz
+    version: v0.5.0
+  - apiVersion: v2
     appVersion: v0.4.0
     created: "2023-09-22T14:41:44.312565303Z"
     dependencies:
@@ -211,4 +225,4 @@ entries:
     urls:
     - .cr-release-packages/global-owner-0.1.0.tgz
     version: 0.1.0
-generated: "2023-09-22T14:41:44.313342694Z"
+generated: "2023-09-26T21:21:22.847012884Z"
