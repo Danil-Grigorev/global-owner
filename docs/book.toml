@@ -1,0 +1,16 @@
+[book]
+language = "en"
+multilingual = false
+src = "src"
+title = "Global Owner"
+description = "Global Ownership resource"
+
+[preprocessor.toc]
+command = "mdbook-toc"
+marker = "[[_TOC_]]"
+
+[output.html]
+mathjax-support = true
+git-repository-url = "https://github.com/Danil-Grigorev/global-owner"
+git-repository-icon = "fa-github"
+site-url = "/global-owner/"
