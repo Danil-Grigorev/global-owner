@@ -26,15 +26,20 @@ local hooks(bootstrapper) = {
 };
 
 local compositeController(child, index, globalowner, bootstrapper) = {
+  local name = 'group-owner' + '-' + child.resource + '-' + index,
+  local group = std.split(child.apiVersion, '/')[0] + '-' + child.resource + '-' + index,
   apiVersion: bootstrapper.apiVersion,
   kind: 'CompositeController',
   metadata: {
-    name: 'group-owner' + '-' + child.resource + '-' + index,
+    name: name,
   },
   spec: {
     parentResource: {
       apiVersion: globalowner.apiVersion,
       resource: 'groupowners',
+      labelSelector: {
+        matchLabels: { group: group },
+      },
     },
     childResources: [originalChild(child)],
     hooks: hooks(bootstrapper),

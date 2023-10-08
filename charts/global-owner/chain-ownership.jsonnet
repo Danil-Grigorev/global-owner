@@ -5,12 +5,14 @@ local defaultSelector = {
 };
 
 local groupOwner(globalowner, child, n) = {
-  local name = globalowner.metadata.name + '-' + std.split(child.apiVersion, '/')[0] + '-' + child.resource + '-' + n,
+  local group = std.split(child.apiVersion, '/')[0] + '-' + child.resource + '-' + n,
+  local name = globalowner.metadata.name + '-' + group,
 
   apiVersion: 'globalowner.metacontroller.io/v1alpha1',
   kind: 'GroupOwner',
   metadata: {
     name: name,
+    labels: { group: group },
   },
   spec: {
     selector: std.get(child, 'selector', std.get(globalowner.spec, 'selector', defaultSelector)),
@@ -19,7 +21,7 @@ local groupOwner(globalowner, child, n) = {
 };
 
 local groupOwners(globalowner) = [
-  groupOwner(globalowner, globalowner.spec.childResources[index], index + 1)
+  groupOwner(globalowner, globalowner.spec.childResources[index], index)
   for index in std.range(0, std.length(globalowner.spec.childResources) - 1)
 ];
 
