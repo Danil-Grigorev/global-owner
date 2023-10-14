@@ -2,7 +2,11 @@
 
 Resources deletion is processed in the order specified on the `GlobalOwner` resource.
 
-![Deletion process](./deletion.png)
+![Deletion process](./deletion.jpg)
+
+### Blockers
+
+Unfortunately this design does not work, because of an issue in the garbage collector implementation: <https://github.com/kubernetes/kubernetes/issues/121113>. Until it is fixed, this is just a concept.
 
 ## Deletion
 

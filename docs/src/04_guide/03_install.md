@@ -2,8 +2,6 @@
 
 This page describes how to install Global Owner resource controller using kustomize.
 
-[[_TOC_]]
-
 ### Prerequisites
 
 * Install [Metacontroller](https://github.com/metacontroller/metacontroller)

@@ -26,5 +26,5 @@ Charts are published as [packages on ghcr.io](https://ghcr.io/danil-grigorev/glo
 
 To install it from registry:
 ```sh
-helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.5.1
+helm install globalowner -n metacontroller --create-namespace oci://ghcr.io/danil-grigorev/global-owner --version=v0.5.1 --wait
 ```

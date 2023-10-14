@@ -27,6 +27,9 @@ tilt-settings.json
 tilt-settings.yaml
 
 out/
+# Docs output
+docs/book
+docs/src/SUMMARY.md
 
 # Chart dependencies
 **/charts/*.tgz

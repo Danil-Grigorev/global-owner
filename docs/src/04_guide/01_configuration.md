@@ -5,7 +5,7 @@ This page describes how to configure the Global Owner resource.
 ## Helm values
 
 | Parameter | Description | Default |
-|-|-|
+|-|-|-|
 `namespaceOverride` | Namespace override value for installed global owner controller instance | `""` |
 `nameOverride` | Name override value for installed global owner controller instance | `""` |
 `image` | Jsonnet image to use for controller functionality | `ghcr.io/danil-grigorev/jsonnetd:v0.3.1` |

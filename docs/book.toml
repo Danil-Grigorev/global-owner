@@ -9,8 +9,18 @@ description = "Global Ownership resource"
 command = "mdbook-toc"
 marker = "[[_TOC_]]"
 
+[preprocessor.fs-summary]
+# (default: true)
+clean-paths = false
+
+# other preprocessors will naturally need to 
+# run after the summary has been generated 
+[preprocessor.links]
+after = ["fs-summary"] 
+
 [output.html]
 mathjax-support = true
 git-repository-url = "https://github.com/Danil-Grigorev/global-owner"
 git-repository-icon = "fa-github"
 site-url = "/global-owner/"
+

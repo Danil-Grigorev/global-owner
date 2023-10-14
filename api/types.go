@@ -43,8 +43,6 @@ type GlobalOwnerSpec struct {
 type ChildResource struct {
 	metacontrollerv1alpha1.ResourceRule `json:",inline"`
 
-	UpdateStrategy *metacontrollerv1alpha1.CompositeControllerChildUpdateStrategy `json:"updateStrategy,omitempty"`
-
 	Names     []string              `json:"names,omitempty"`
 	Namespace string                `json:"namespace,omitempty"`
 	Selector  *metav1.LabelSelector `json:"selector,omitempty"`

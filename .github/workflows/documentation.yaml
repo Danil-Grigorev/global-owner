@@ -14,14 +14,34 @@ permissions:
 jobs:
   gh-pages:
     runs-on: ubuntu-latest
-    container:
-      image: "michaelfbryan/mdbook-docker-image:latest"
     steps:
     - uses: actions/checkout@v3
+    - uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+
+    - name: Install mdBook
+      uses: extractions/setup-crate@v1
+      with:
+        owner: rust-lang
+        name: mdBook
+
+    - name: Install mdBook summary gen
+      uses: actions-rs/install@v0.1
+      with:
+        crate: mdbook-fs-summary
+
+    - name: Install mdBook toc
+      uses: actions-rs/install@v0.1
+      with:
+        crate: mdbook-toc
+
     - name: Build mdbook
       run: |
         cd docs
         mdbook build
+
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
